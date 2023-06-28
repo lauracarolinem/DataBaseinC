@@ -66,7 +66,7 @@ void createTable(PGconn *conn)
 void criarColuna(PGconn *conn)
 {
     PGresult *res;
-    //char option;
+    // char option;
     char tableName[100];
     printf("Digite o nome da tabela que deseja inserir: ");
     scanf("%s", tableName);
@@ -166,6 +166,11 @@ void especificacoes(PGconn *conn)
     PQclear(res);
 }
 
+void exibirDadosFiltrados(PGconn *conn)
+{
+    
+}
+
 int main(int argc, char const *argv[])
 {
     PGresult *res;
@@ -190,18 +195,18 @@ int main(int argc, char const *argv[])
     }
     printf("Certo\n\n\n");
 
-    printf("--Sistema de Banco de Dados Postgres--\n\n");
-    printf("1 - Exibir lista de tabelas\n");
-    printf("2 - Especificações de campos\n");
-    printf("3 - Criar nova tabela\n");
-    printf("4 - Inserir dados\n");
-    printf("5 - Exibir dados\n");
-    printf("6 - Remover dados\n");
-    printf("7 - Remover tabelas\n");
-    printf("8 - Criar coluna\n");
-    printf("9 - Sair\n");
     do
     {
+        printf("--Sistema de Banco de Dados Postgres--\n\n");
+        printf("1 - Exibir lista de tabelas\n");
+        printf("2 - Especificações de campos\n");
+        printf("3 - Criar nova tabela\n");
+        printf("4 - Inserir dados\n");
+        printf("5 - Exibir dados\n");
+        printf("6 - Remover dados\n");
+        printf("7 - Remover tabelas\n");
+        printf("8 - Criar coluna\n");
+        printf("9 - Sair\n");
         scanf("%d", &option);
         switch (option)
         {
@@ -218,7 +223,7 @@ int main(int argc, char const *argv[])
             inserirDados(conn);
             break;
         case 5:
-
+            exibirDadosFiltrados(conn);
             break;
         case 6:
             /* code */
