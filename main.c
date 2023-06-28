@@ -126,13 +126,15 @@ void inserirDados(PGconn *conn)
         exit_nicely(conn);
     }
     PQclear(res);
+    
 }
+
 
 void especificacoes(PGconn *conn)
 {
     int i, j;
     char tableName[100];
-    printf("Digite o nome da tabela: ");
+    printf("\nDigite o nome da tabela: ");
     scanf("%s", tableName);
     char query[500];
     sprintf(query, "SELECT column_name, data_type FROM information_schema.columns WHERE table_schema = 'public' AND table_name = '%s';", tableName);
@@ -168,7 +170,25 @@ void especificacoes(PGconn *conn)
 
 void exibirDadosFiltrados(PGconn *conn)
 {
-    
+    PGresult *res;
+    int option =0;
+    int option2=0;
+    char tableName[100];
+
+    printf("Digite o nome da tabela: ");
+    scanf("%s", tableName);
+
+    printf("Voce deseja fazer modificações numéricas ou em string? \n");
+    printf("1 - Numéricas\n");
+    printf("2 - String\n");
+    scanf("%d", &option);
+
+    if(option == 1)
+    {
+        printf("Voce deseja fazer modificações em: \n");
+
+    }
+
 }
 
 int main(int argc, char const *argv[])
@@ -197,7 +217,7 @@ int main(int argc, char const *argv[])
 
     do
     {
-        printf("--Sistema de Banco de Dados Postgres--\n\n");
+        printf("\n--Sistema de Banco de Dados Postgres--\n\n");
         printf("1 - Exibir lista de tabelas\n");
         printf("2 - Especificações de campos\n");
         printf("3 - Criar nova tabela\n");
@@ -206,7 +226,8 @@ int main(int argc, char const *argv[])
         printf("6 - Remover dados\n");
         printf("7 - Remover tabelas\n");
         printf("8 - Criar coluna\n");
-        printf("9 - Sair\n");
+        printf("9 - Sair\n\n");
+        printf("Digite a opção desejada: ");
         scanf("%d", &option);
         switch (option)
         {
@@ -238,6 +259,7 @@ int main(int argc, char const *argv[])
             return 0;
             break;
         default:
+            return 0;
             break;
         }
     } while (option != 7);
