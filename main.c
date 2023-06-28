@@ -19,7 +19,8 @@ void deletarTabelas(PGconn *conn)
     PGresult *res = PQexec(conn, query);
     if (PQresultStatus(res) != PGRES_COMMAND_OK)
     {
-        exit_nicely(conn);
+        printf("Erro ao deletar tabela\n");
+        // exit_nicely(conn);
     }
     PQclear(res);
 }
@@ -56,41 +57,38 @@ void createTable(PGconn *conn)
     res = PQexec(conn, queryTable);
     if (PQresultStatus(res) != PGRES_COMMAND_OK)
     {
+        printf("Erro ao criar a tabela\n");
         exit_nicely(conn);
     }
     PQclear(res);
 }
 
-void inserirColunas(PGconn *conn)
+void criarColuna(PGconn *conn)
 {
     PGresult *res;
-    char option;
+    //char option;
     char tableName[100];
     printf("Digite o nome da tabela que deseja inserir: ");
     scanf("%s", tableName);
 
-    do
+    char columnName[100];
+    char columnType[100];
+    printf("Digite o nome da coluna: \n");
+    scanf("%s", columnName);
+
+    printf("Digite o tipo da coluna: \n");
+    scanf("%s", columnType);
+
+    char query[500];
+    sprintf(query, "ALTER TABLE %s ADD COLUMN %s %s;", tableName, columnName, columnType);
+    res = PQexec(conn, query);
+    if (PQresultStatus(res) != PGRES_COMMAND_OK)
     {
-        char columnName[100];
-        char columnType[100];
-        printf("Digite o nome da coluna: \n");
-        scanf("%s", columnName);
-
-        printf("Digite o tipo da coluna: \n");
-        scanf("%s", columnType);
-
-        char query[500];
-        sprintf(query, "ALTER TABLE %s ADD COLUMN %s %s;", tableName, columnName, columnType);
-        res = PQexec(conn, query);
-        if (PQresultStatus(res) != PGRES_COMMAND_OK)
-        {
-            exit_nicely(conn);
-        }
-        PQclear(res);
-
-        printf("Deseja adicionar mais uma coluna? (s/n)\n");
-        scanf("%c", &option);
-    } while (option == 's');
+        printf("Erro ao alterar a tabela\n");
+        exit_nicely(conn);
+        return;
+    }
+    PQclear(res);
 }
 
 void inserirDados(PGconn *conn)
@@ -124,6 +122,7 @@ void inserirDados(PGconn *conn)
     res = PQexec(conn, queryInsert);
     if (PQresultStatus(res) != PGRES_COMMAND_OK)
     {
+        printf("Erro ao inserir tabela\n");
         exit_nicely(conn);
     }
     PQclear(res);
@@ -131,13 +130,13 @@ void inserirDados(PGconn *conn)
 
 void especificacoes(PGconn *conn)
 {
-    int i,j;
+    int i, j;
     char tableName[100];
     printf("Digite o nome da tabela: ");
     scanf("%s", tableName);
     char query[500];
     sprintf(query, "SELECT column_name, data_type FROM information_schema.columns WHERE table_schema = 'public' AND table_name = '%s';", tableName);
-    //printf("%s\n", query);
+    // printf("%s\n", query);
     PGresult *res = PQexec(conn, query);
     if (PQresultStatus(res) != PGRES_TUPLES_OK)
     {
@@ -199,7 +198,7 @@ int main(int argc, char const *argv[])
     printf("5 - Exibir dados\n");
     printf("6 - Remover dados\n");
     printf("7 - Remover tabelas\n");
-    printf("8 - Inserir colunas\n");
+    printf("8 - Criar coluna\n");
     printf("9 - Sair\n");
     do
     {
@@ -228,7 +227,7 @@ int main(int argc, char const *argv[])
             deletarTabelas(conn);
             break;
         case 8:
-            inserirColunas(conn);
+            criarColuna(conn);
             break;
         case 9:
             return 0;
@@ -237,4 +236,6 @@ int main(int argc, char const *argv[])
             break;
         }
     } while (option != 7);
+
+    return 0;
 }
